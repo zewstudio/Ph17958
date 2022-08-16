@@ -32,11 +32,9 @@
 
                 <img src="<%= datas[i]._fileName %>" style="width: 500px;height: 500px">
             <div style="text-align: left;padding-left: 20px;margin: 10px">
-                <h5>Mã: <%= datas[i]._ma %> </h5>
-                <h5>Nhãn Hiệu: <%= datas[i]._nhanHieu %> </h5>
-                <h5>Năm Sản Xuất: <%= datas[i]._namSX %> </h5>
-                <h5>Giá Gốc: <%= datas[i]._giaGoc %> $</h5>
-                <h5>Giá Bán: <%= datas[i]._giaBan %> $ </h5>
+                <h5>TieuDe: <%= datas[i]._title %> </h5>
+                <h5>Noi Dung: <%= datas[i]._content %> </h5>
+                <h5>Bai Viet: <%= datas[i]._baiviet %> </h5>
             </div>
             <a href="/delete/?id=<%= datas[i]._id %>" style="text-decoration: none;font-size: 20px;color: orangered;border: 1px solid black; padding: 10px">Delete</a>
 
