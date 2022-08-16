@@ -4,15 +4,13 @@ var router = express.Router();
 var multer = require('multer');
 var mongoose_ = require('mongoose')
 const {Schema} = require("mongoose");
-const uri = "mongodb+srv://zewdatabase:ijoXgdmQ0NCyg9DO@zewgame.urb3i.mongodb.net/ontap?retryWrites=true&w=majority";
+const uri = "mongodb+srv://zewdatabase:ijoXgdmQ0NCyg9DO@zewgame.urb3i.mongodb.net/ph17958?retryWrites=true&w=majority";
 mongoose_.connect(uri).catch(err => console.log('Co Loi Xay Ra'))
 
-const ontap = mongoose_.model('ontap1',new Schema({
-  "_ma" : String,
-  "_nhanHieu":String,
-  "_namSX":String,
-  "_giaGoc":String,
-  "_giaBan":String,
+const ontap = mongoose_.model('baithi',new Schema({
+  "_title" : String,
+  "_content":String,
+  "_baiviet":String,
   "_fileName":String,
 }))
 
@@ -55,7 +53,8 @@ var upload = multer({
 
    }
   }
-}).single('file');
+}).single('file')
+//.array('file',3);
 var imagelink;
 function setImglink(text)
 {
@@ -64,17 +63,18 @@ function setImglink(text)
 var listData=[];
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('home', { title: 'Express' });
 });
 router.get('/index', function(req, res, next) {
+  res.render('home', { title: 'Express' });
+});
+router.get('/insert', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 router.post('/insert/', upload,function(req, res, next) {
-  var maOto = req.body.a;
-  var nhanHieu = req.body.b;
-  var namSX = req.body.c;
-  var giaGoc = req.body.d;
-  var giaBan = req.body.e;
+  var title_ = req.body.title;
+  var content_ = req.body.content;
+  var baiviet_ = req.body.baiviet;
   if(imagelink==null)
   {
     res.send("File ko hop le"+`<a href='/index' > Return </a>`);
@@ -84,23 +84,17 @@ router.post('/insert/', upload,function(req, res, next) {
   console.log(req.body.file)
 
 
-  if(maOto.length==0||nhanHieu.length==0||namSX.length==0||giaGoc.length==0||giaBan.length==0)
+  if(title_.length==0||content_.length==0||baiviet_.length==0)
   {
 
 
         res.send("Không được để trống"+`<a href='/index' > Return </a>`);
         return;
-  }else if(namSX.length<4||namSX.length>4)
-  {
-    res.send("vui lòng nhập lại năm sản xuất "+`<a href='/index' > Return </a>`);
-    return;
   }
   var dataz = {
-    "_ma" : maOto,
-    "_nhanHieu":nhanHieu,
-    "_namSX":namSX,
-    "_giaGoc":giaGoc,
-    "_giaBan":giaBan,
+    "_title" : title_,
+    "_content":content_,
+    "_baiviet":baiviet_,
     "_fileName":filename,
   }
   console.log(filename);
@@ -133,7 +127,7 @@ router.get('/delete/', function(req, res, next) {
   var id = req.query.id;
   ontap.deleteOne({_id:id},function (error){
     if (error) throw error;
-    res.send("Delete Thanh Cong"+`<a href='/show'>Quay Lai Danh Sach</a>`)
+    res.send("Delete Thanh Cong"+`<a href='/index'>Quay Lai home</a>`)
   })
 });
 router.get('/show/search',function (req,res){
@@ -152,5 +146,10 @@ router.get('/show/search',function (req,res){
   }
 
 })
-
+router.get('/getList',function (req,res){
+  ontap.find({},function (error, result){
+    if(error) throw error;
+    res.send(result);
+  })
+})
 module.exports = router;
